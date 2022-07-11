@@ -1,5 +1,5 @@
-let isTodoCardBeingEdited = false
-let todoCardBeingEdited
+let isTodoCardBeingEdited = false // needed in onSubmit, to know whether to create new todo or edit a todo
+let todoCardBeingEdited // needed in editTodo, to put values from form inputs into todo that's being edited
 const CLASS_NAMES = {
   todoCard: "todo-card",
   todoCardTitle: "todo-card-title",
@@ -13,6 +13,7 @@ const CLASS_NAMES = {
 }
 
 const editTodo = (e) => {
+  // moving content of todo, that's being edited, into form inputs
   todoCardBeingEdited.querySelector(`.${CLASS_NAMES.todoCardTitle}`).innerText =
     e.target[0].value
   todoCardBeingEdited.querySelector(`.${CLASS_NAMES.todoCardBody}`).innerText =
@@ -23,6 +24,7 @@ const editTodo = (e) => {
 }
 
 const createNewTodo = (e) => {
+  // appending a new todo to todoContainer element
   todoContainer.innerHTML += `<div class=${CLASS_NAMES.todoCard}>
     <div class=${CLASS_NAMES.todoCardText}>
   <div class=${CLASS_NAMES.todoCardTitle}>${e.target[0].value}</div>
@@ -49,12 +51,15 @@ const onSubmit = (e) => {
 const putTodoValuesInForm = (e) => {
   isTodoCardBeingEdited = true
   todoCardBeingEdited = e.target.closest(`.${CLASS_NAMES.todoCard}`)
+  // putting todo's title into form's input
   createTodoForm[0].value = e.target
     .closest(`.${CLASS_NAMES.todoCard}`)
     .querySelector(`.${CLASS_NAMES.todoCardTitle}`).innerText
+  // putting todo's body into form's input
   createTodoForm[1].value = e.target
     .closest(`.${CLASS_NAMES.todoCard}`)
     .querySelector(`.${CLASS_NAMES.todoCardBody}`).innerText
+  // changing form's button's content from "Create todo" to "Save todo"
   createTodoForm[2].innerText = "Save todo"
   createTodoForm[0].focus()
 }
