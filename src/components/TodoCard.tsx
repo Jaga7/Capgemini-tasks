@@ -13,7 +13,7 @@ type TodoCardProps = {
 const TodoCard = ({ todo, startEditing, completeTodo }: TodoCardProps) => {
   return (
     <div
-      className={"todo-card " + (todo.isComplete && "todo-card--complete")}
+      className={"todo-card " + (todo.isComplete && "todo-card--complete")} // adding classname "todo-card--complete" based on the todo element's "isComplete" flag
       key={todo.id}
     >
       <div className='todo-card-text'>
@@ -23,7 +23,7 @@ const TodoCard = ({ todo, startEditing, completeTodo }: TodoCardProps) => {
       <div className='todo-card-buttons'>
         <button
           onClick={(e) => {
-            startEditing(todo)
+            startEditing(todo) // calling the prop-drilled callback function to start editing a TODO
           }}
           className='todo-card-button edit-button'
         >
@@ -31,7 +31,7 @@ const TodoCard = ({ todo, startEditing, completeTodo }: TodoCardProps) => {
         </button>
         <button
           className='todo-card-button complete-button'
-          onClick={(e) => completeTodo(todo.id)}
+          onClick={(e) => completeTodo(todo.id)} // calling the prop-drilled callback function to complete a TODO
         >
           Complete
         </button>

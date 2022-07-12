@@ -1,9 +1,5 @@
 import TodoCard from "./TodoCard"
 
-// interface Todos {
-//   children: Todo
-// }
-
 type TodoObject = {
   title: string
   body: string
@@ -19,8 +15,8 @@ type TodoContainerProps = {
 
 const TodoContainer = ({
   todos,
-  startEditing,
-  completeTodo,
+  startEditing /* prop-drilling to TodoCard */,
+  completeTodo /* prop-drilling to TodoCard */,
 }: TodoContainerProps) => {
   return (
     <div className='todo-container'>
@@ -29,8 +25,8 @@ const TodoContainer = ({
         <TodoCard
           key={index}
           todo={todo}
-          startEditing={startEditing}
-          completeTodo={completeTodo}
+          startEditing={startEditing} // prop-drilling to TodoCard
+          completeTodo={completeTodo} // prop-drilling to TodoCard
         />
       ))}
     </div>

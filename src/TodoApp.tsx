@@ -1,11 +1,11 @@
 import { useRef, useState } from "react"
-import TodoContainer from "./TodoContainer"
-import TodoForm from "./TodoForm"
+import TodoContainer from "./components/TodoContainer"
+import TodoForm from "./components/TodoForm"
 
 const TodoApp = () => {
   const initialState = {
-    newTodoTitle: "",
-    newTodoBody: "",
+    newTodoTitle: "", // value of todo title input
+    newTodoBody: "", // value of todo body input
     todos: [
       {
         title:
@@ -15,12 +15,12 @@ const TodoApp = () => {
         isComplete: false,
       },
     ],
-    isTodoCardBeingEdited: false,
-    idOfTodoBeingEdited: null as number | null,
+    isTodoCardBeingEdited: false, // needed to display "save todo" instead of "create todo" and in onSubmitForm to know whether to create a new TODO or edit one
+    idOfTodoBeingEdited: null as number | null, // needed in onSubmitForm to know which TODO to edit
   }
 
   const [state, setState] = useState(initialState)
-  const titleInputRef = useRef<HTMLInputElement>(null)
+  const titleInputRef = useRef<HTMLInputElement>(null) // needed for focusing on the todo title input, when clicked "edit"
   const changeState = (value: string | boolean | number, prop: string) => {
     setState({ ...state, [prop]: value })
   }
@@ -40,7 +40,7 @@ const TodoApp = () => {
     },
   ]
 
-  const submitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const onSubmitForm = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (state.isTodoCardBeingEdited) {
@@ -68,10 +68,12 @@ const TodoApp = () => {
   }
 
   const createTodo = (e: React.ChangeEvent<HTMLFormElement>) => {
-    const todoTitleInput = e.target[0] as HTMLInputElement
-    const todoBodyInput = e.target[1] as HTMLInputElement
-    const todoTitle = todoTitleInput.value
-    const todoBody = todoBodyInput.value
+    const todoTitleInput = e.target[0] as HTMLInputElement // split into two lines this way for Typescript, extracting inputElement
+    const todoTitle = todoTitleInput.value // split into two lines this way for Typescript, extracting value of the input
+
+    const todoBodyInput = e.target[1] as HTMLInputElement // split into two lines this way for Typescript, extracting inputElement
+    const todoBody = todoBodyInput.value // split into two lines this way for Typescript, extracting value of the input
+
     const idForNewTodo = state.todos[state.todos.length - 1].id + 1
     setState({
       newTodoTitle: "",
@@ -91,7 +93,7 @@ const TodoApp = () => {
   }
 
   const startEditing = (todo: { title: string; body: string; id: number }) => {
-    focusTitleInput()
+    focusTitleInput() // focusing on todo title input, so that the user can right away type after clicking "edit"
     setState({
       newTodoTitle: todo.title,
       newTodoBody: todo.body,
@@ -101,9 +103,9 @@ const TodoApp = () => {
     })
   }
 
+  // focusing on todo title input, so that the user can right away type after clicking "edit"
   const focusTitleInput = () => {
     titleInputRef.current?.focus()
-    // titleInputRef.current!.focus()
   }
 
   const completeTodo = (idOfTodoToBeCompleted: number) => {
@@ -114,7 +116,7 @@ const TodoApp = () => {
           todo.id === idOfTodoToBeCompleted
             ? {
                 ...todo,
-                isComplete: true,
+                isComplete: true, // based on this value we set or not className "todo-card--complete" on TodoCard component
               }
             : todo
         ),
@@ -129,16 +131,16 @@ const TodoApp = () => {
         newTodoValues={{
           newTodoTitle: state.newTodoTitle,
           newTodoBody: state.newTodoBody,
-        }}
+        }} // I put newTodoTitle and newTodoBody into one object for better readability
         config={config}
         changeState={changeState}
-        onSubmit={submitForm}
+        onSubmit={onSubmitForm}
         isTodoCardBeingEdited={state.isTodoCardBeingEdited}
       ></TodoForm>
       <TodoContainer
         todos={state.todos}
-        startEditing={startEditing}
-        completeTodo={completeTodo}
+        startEditing={startEditing} // callback function to start editing a TODO, prop-drilling to TodoCard :/
+        completeTodo={completeTodo} // callback function to complete a TODO, prop-drilling to TodoCard :/
       ></TodoContainer>
     </>
   )
