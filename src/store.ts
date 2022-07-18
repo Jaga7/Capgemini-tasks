@@ -1,15 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit"
+import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import type { PreloadedState } from "@reduxjs/toolkit"
+
 import todoFormReducer from "./features/todoForm/todoFormSlice"
 import todoContainerReducer from "./features/todoContainer/todoContainerSlice"
 
-export const store = configureStore({
-  reducer: {
-    todoForm: todoFormReducer,
-    todoContainer: todoContainerReducer,
-  },
+// Create the root reducer separately so we can extract the RootState type
+const rootReducer = combineReducers({
+  todoForm: todoFormReducer,
+  todoContainer: todoContainerReducer,
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {todoForm: todoFormState,  todoContainer: todoContainerState,}
-export type AppDispatch = typeof store.dispatch
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  })
+}
+
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore["dispatch"]

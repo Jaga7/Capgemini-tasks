@@ -1,25 +1,25 @@
-import { useAppDispatch, useAppSelector } from "../shared/utils/hooks"
-import { startEditingTodo } from "../features/todoForm/todoFormSlice"
+import { useAppDispatch, useAppSelector } from "../shared/utils/hooks";
+import { startEditingTodo } from "../features/todoForm/todoFormSlice";
 import {
   completeTheTodo,
   deleteTheTodo,
-} from "../features/todoContainer/todoContainerSlice"
+} from "../features/todoContainer/todoContainerSlice";
 
 type TodoObject = {
-  title: string
-  body: string
-  id: number
-  isComplete: boolean
-}
+  title: string;
+  body: string;
+  id: number;
+  isComplete: boolean;
+};
 
 type TodoCardProps = {
-  todo: TodoObject
-}
+  todo: TodoObject;
+};
 const TodoCard = ({ todo }: TodoCardProps) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { idOfTodoBeingEdited, isTodoCardBeingEdited } = useAppSelector(
     (state) => state.todoForm
-  )
+  );
   return (
     <div
       className={
@@ -38,7 +38,7 @@ const TodoCard = ({ todo }: TodoCardProps) => {
       <div className='todo-card-buttons'>
         <button
           onClick={(e) => {
-            dispatch(startEditingTodo(todo)) // dispatching action "startEditingTodo" to start editing the TODO
+            dispatch(startEditingTodo(todo)); // dispatching action "startEditingTodo" to start editing the TODO
           }}
           className='todo-card-button edit-button'
         >
@@ -51,12 +51,12 @@ const TodoCard = ({ todo }: TodoCardProps) => {
                 idOfTodoBeingCompleted: todo.id,
                 isTodoAlreadyComplete: todo.isComplete,
               })
-            ) // dispatching action "completeTheTodo" to complete the TODO
+            ); // dispatching action "completeTheTodo" to complete the TODO
           }}
           className={
             "todo-card-button " +
             "complete-button " +
-            (todo.isComplete && "complete-button--complete")
+            (todo.isComplete ? "complete-button--complete" : "")
           } // adding classname "complete-button--complete" based on the todo element's "isComplete" flag
           // className='todo-card-button complete-button'
         >
@@ -64,7 +64,7 @@ const TodoCard = ({ todo }: TodoCardProps) => {
         </button>
         <button
           onClick={(e) => {
-            dispatch(deleteTheTodo(todo.id)) // dispatching action "deleteTheTodo" to delete the TODO
+            dispatch(deleteTheTodo(todo.id)); // dispatching action "deleteTheTodo" to delete the TODO
           }}
           className='todo-card-button delete-button'
         >
@@ -72,6 +72,6 @@ const TodoCard = ({ todo }: TodoCardProps) => {
         </button>
       </div>
     </div>
-  )
-}
-export default TodoCard
+  );
+};
+export default TodoCard;

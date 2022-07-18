@@ -1,38 +1,15 @@
-import React, { FormEventHandler } from "react"
-import { useAppDispatch, useAppSelector } from "../shared/utils/hooks"
-import {
-  changeFormTitleInputValue,
-  changeFormBodyInputValue,
-} from "../features/todoForm/todoFormSlice"
-
-type FormInputProps = {
-  onSubmit: FormEventHandler<HTMLFormElement>
-}
-
-const config = [
-  {
-    placeholderName: "Title",
-    propName: "newTodoTitle",
-    label: "Todo Title",
-    classNameSuffix: "title",
-    reduxAction: changeFormTitleInputValue,
-  },
-  {
-    placeholderName: "Body",
-    propName: "newTodoBody",
-    label: "Todo Body",
-    classNameSuffix: "body",
-    reduxAction: changeFormBodyInputValue,
-  },
-]
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../shared/utils/hooks";
+import { config } from "./constants";
+import { FormInputProps } from "./TodoFormTypes";
 
 const TodoForm = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ onSubmit }, ref) => {
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
     const { newTodoTitle, newTodoBody, isTodoCardBeingEdited } = useAppSelector(
       (state) => state.todoForm
-    )
-    const newTodoValues = { newTodoTitle, newTodoBody }
+    );
+    const newTodoValues = { newTodoTitle, newTodoBody };
     return (
       <header>
         <form action='' className='create-todo-form' onSubmit={onSubmit}>
@@ -53,8 +30,8 @@ const TodoForm = React.forwardRef<HTMLInputElement, FormInputProps>(
                     newTodoValues[input.propName as keyof typeof newTodoValues]
                   }
                   onChange={(e) => {
-                    const newInputValue = e.target.value
-                    dispatch(input.reduxAction({ newInputValue }))
+                    const newInputValue = e.target.value;
+                    dispatch(input.reduxAction({ newInputValue }));
                   }}
                   placeholder={input.placeholderName}
                   {...(input.propName === "newTodoTitle" && {
@@ -68,7 +45,7 @@ const TodoForm = React.forwardRef<HTMLInputElement, FormInputProps>(
           <button>{isTodoCardBeingEdited ? "Save todo" : "Create todo"}</button>
         </form>
       </header>
-    )
+    );
   }
-)
-export default TodoForm
+);
+export default TodoForm;
