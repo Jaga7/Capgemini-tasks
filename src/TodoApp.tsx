@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import TodoContainer from "./components/TodoContainer";
+import TodoContainer from "./components/TodoContainer/TodoContainer";
 import TodoForm from "./components/TodoForm";
 import { useAppDispatch, useAppSelector } from "./shared/utils/hooks";
 import {
@@ -7,6 +7,9 @@ import {
   editTheTodo,
 } from "./features/todoContainer/todoContainerSlice";
 import { finishEdit, clearInputs } from "./features/todoForm/todoFormSlice";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ViewTodo, Home } from "./components";
+import SharedLayout from "./pages/dashboard/SharedLayout";
 
 const TodoApp = () => {
   const { isTodoCardBeingEdited, idOfTodoBeingEdited } = useAppSelector(
@@ -44,7 +47,9 @@ const TodoApp = () => {
         editTheTodo({
           title: newTodoTitle,
           body: newTodoBody,
-          idOfTodoBeingEdited: idOfTodoBeingEdited as number,
+          id: idOfTodoBeingEdited as number,
+          isComplete: todos.find((todo) => todo.id === idOfTodoBeingEdited)!
+            .isComplete,
         })
       ); // dispatching "editTheTodo" action, passing todo's edited title, todo's edited body and its id
       dispatch(finishEdit());
@@ -60,10 +65,27 @@ const TodoApp = () => {
   };
 
   return (
-    <>
-      <TodoForm ref={titleInputRef} onSubmit={submitForm}></TodoForm>
-      <TodoContainer></TodoContainer>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<SharedLayout />}>
+          <Route index element={<Home />}></Route>
+          <Route
+            path='todos'
+            element={
+              <>
+                <TodoForm ref={titleInputRef} onSubmit={submitForm}></TodoForm>
+                <TodoContainer />
+              </>
+            }
+          >
+            <Route path=':todoId' element={<ViewTodo />} />
+          </Route>
+        </Route>
+
+        {/* <TodoForm ref={titleInputRef} onSubmit={submitForm}></TodoForm> */}
+        {/* <TodoContainer></TodoContainer> */}
+      </Routes>
+    </BrowserRouter>
   );
 };
 export default TodoApp;

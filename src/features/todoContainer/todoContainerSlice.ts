@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../shared/utils/api";
+import { TodoObject } from "../../components/TodoCardTypes";
 
 const endpoint = "/todos";
 
@@ -48,20 +49,33 @@ export const createATodo = createAsyncThunk(
 export const editTheTodo = createAsyncThunk(
   "todoContainer/editTheTodo",
   async (
-    editedTodoIdAndNewTitleAndBody: {
-      title: string;
-      body: string;
-      idOfTodoBeingEdited: number;
-    },
+    // editedTodoIdAndNewTitleAndBody: {
+    //   title: string;
+    //   body: string;
+    //   idOfTodoBeingEdited: number;
+    // },
+    todo: TodoObject,
     thunkAPI
   ) => {
-    const { idOfTodoBeingEdited } = editedTodoIdAndNewTitleAndBody;
-    const { title, body } = editedTodoIdAndNewTitleAndBody;
+    // const { idOfTodoBeingEdited } = editedTodoIdAndNewTitleAndBody;
+    // const { title, body } = editedTodoIdAndNewTitleAndBody;
+    const {
+      id: idOfTodoBeingEdited,
+      isComplete,
+      body: newBody,
+      title: newTitle,
+    } = todo;
     try {
-      const resp = await api.patch(`${endpoint}/${idOfTodoBeingEdited}`, {
-        title,
-        body,
+      const resp = await api.put(`${endpoint}/${idOfTodoBeingEdited}`, {
+        id: idOfTodoBeingEdited,
+        title: newTitle,
+        body: newBody,
+        isComplete,
       });
+      // const resp = await api.patch(`${endpoint}/${idOfTodoBeingEdited}`, {
+      //   title,
+      //   body,
+      // });
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("something went wrong");
@@ -72,19 +86,31 @@ export const editTheTodo = createAsyncThunk(
 export const completeTheTodo = createAsyncThunk(
   "todoContainer/completeTheTodo",
   async (
-    isTodoCompleteAndIdOfTodo: {
-      idOfTodoBeingCompleted: number;
-      isTodoAlreadyComplete: boolean;
-    },
-
+    // isTodoCompleteAndIdOfTodo: {
+    //   idOfTodoBeingCompleted: number | string;
+    //   isTodoAlreadyComplete: boolean;
+    // },
+    todo: TodoObject,
     thunkAPI
   ) => {
-    const { idOfTodoBeingCompleted, isTodoAlreadyComplete } =
-      isTodoCompleteAndIdOfTodo;
+    const {
+      id: idOfTodoBeingCompleted,
+      isComplete: isTodoAlreadyComplete,
+      body,
+      title,
+    } = todo;
+    // const { idOfTodoBeingCompleted, isTodoAlreadyComplete } =
+    //   isTodoCompleteAndIdOfTodo;
     try {
-      const resp = await api.patch(`${endpoint}/${idOfTodoBeingCompleted}`, {
+      const resp = await api.put(`${endpoint}/${idOfTodoBeingCompleted}`, {
+        id: idOfTodoBeingCompleted,
         isComplete: !isTodoAlreadyComplete,
+        body,
+        title,
       });
+      // const resp = await api.patch(`${endpoint}/${idOfTodoBeingCompleted}`, {
+      //   isComplete: !isTodoAlreadyComplete,
+      // });
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue("something went wrong");
@@ -94,7 +120,7 @@ export const completeTheTodo = createAsyncThunk(
 
 export const deleteTheTodo = createAsyncThunk(
   "todoContainer/deleteTheTodo",
-  async (idOfTodoBeingDeleted: number, thunkAPI) => {
+  async (idOfTodoBeingDeleted: number | string, thunkAPI) => {
     try {
       const resp = await api.delete(`${endpoint}/${idOfTodoBeingDeleted}`);
       return resp.data;
@@ -137,7 +163,12 @@ const todoContainerSlice = createSlice({
         state.isLoading = false;
         // the part below is done so that we make the changes on the local state without doing unnecessary additional GET request
 
-        const { idOfTodoBeingEdited, title, body } = action.meta.arg;
+        const {
+          id: idOfTodoBeingEdited,
+          title: newTitle,
+          body: newBody,
+        } = action.meta.arg;
+        // const { idOfTodoBeingEdited, title, body } = action.meta.arg;
         state.todos = [
           // mapping over todos in search for the one that is to be edited,
           ...state.todos.map(
@@ -145,8 +176,8 @@ const todoContainerSlice = createSlice({
               todo.id === idOfTodoBeingEdited
                 ? //setting a new one in place, leaving the "id" and "isComplete" properties as they were
                   {
-                    title: title,
-                    body: body,
+                    title: newTitle,
+                    body: newBody,
                     id: todo.id,
                     isComplete: todo.isComplete,
                   }
@@ -163,8 +194,14 @@ const todoContainerSlice = createSlice({
       .addCase(completeTheTodo.fulfilled, (state, action) => {
         state.isLoading = false;
         // the part below is done so that we make the changes on the local state without doing unnecessary additional GET request
-        const { idOfTodoBeingCompleted, isTodoAlreadyComplete } =
-          action.meta.arg;
+
+        const {
+          id: idOfTodoBeingCompleted,
+          isComplete: isTodoAlreadyComplete,
+        } = action.meta.arg;
+
+        // const { idOfTodoBeingCompleted, isTodoAlreadyComplete } =
+        //   action.meta.arg;
         state.todos = state.todos.map((todo) =>
           todo.id === idOfTodoBeingCompleted
             ? {

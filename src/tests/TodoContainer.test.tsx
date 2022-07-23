@@ -7,7 +7,7 @@ import {
 } from "@testing-library/react";
 // We're using our own custom render function and not RTL's render.
 import { renderWithProviders } from "../shared/utils/test-utils";
-import TodoContainer from "../components/TodoContainer";
+import TodoContainer from "../components/TodoContainer/TodoContainer";
 import { server } from "../test/server/test-server";
 
 // Enable API mocking before tests.

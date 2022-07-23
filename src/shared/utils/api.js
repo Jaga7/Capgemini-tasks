@@ -1,12 +1,16 @@
 import axios from "axios";
 
 const mode = "dev";
-const URL = mode === "dev" ? "http://localhost" : "";
-const PORT = 3000;
-const baseURL = `${URL}:${PORT}`;
+// const URL = mode === "dev" ? "http://localhost" : "";
+const URL =
+  mode === "dev"
+    ? "http://nestapi-env.eba-9kgvuxij.eu-central-1.elasticbeanstalk.com"
+    : "http://productionurl.com";
+// const PORT = 3000;
+// const baseURL = `${URL}:${PORT}`;
 
 export default axios.create({
-  baseURL,
+  baseURL: URL,
   headers: {
     "Content-Type": "application/json",
   },
