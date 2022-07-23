@@ -3,16 +3,17 @@ import { useAppDispatch, useAppSelector } from "../../shared/utils/hooks";
 import { Key, useEffect } from "react";
 
 import {
-  completeTheTodo,
-  deleteTheTodo,
+  // completeTheTodo,
+  // deleteTheTodo,
   loadTodosFromBackend,
 } from "../../features/todoContainer/todoContainerSlice";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import {
   clearInputs,
   finishEdit,
-  startEditingTodo,
+  // startEditingTodo,
 } from "../../features/todoForm/todoFormSlice";
+import TodoCardButtons from "./TodoCardButtons";
 
 const TodoContainer = () => {
   const dispatch = useAppDispatch();
@@ -25,10 +26,9 @@ const TodoContainer = () => {
     dispatch(clearInputs());
   };
   useEffect(() => {
-    makeSureATodoIsNotBeingEdited();
+    makeSureATodoIsNotBeingEdited(); // for when returning from "/todos/:id/edit"
     LoadTodos();
   }, []);
-  // }, [todos.length])
   return (
     <>
       <Outlet></Outlet>
@@ -50,49 +50,8 @@ const TodoContainer = () => {
               index: Key
             ) => (
               <TodoCard key={index} todo={todo}>
-                <div className='todo-card-buttons'>
-                  <Link to={`/todos/${todo.id}/edit`}>
-                    <button
-                      onClick={(e) => {
-                        dispatch(startEditingTodo(todo)); // dispatching action "startEditingTodo" to start editing the TODO
-                      }}
-                      className='todo-card-button edit-button'
-                    >
-                      Edit
-                    </button>
-                  </Link>
-
-                  <button
-                    onClick={(e) => {
-                      dispatch(
-                        completeTheTodo(
-                          todo
-                          //   {
-
-                          //   // idOfTodoBeingCompleted: todo.id,
-                          //   // isTodoAlreadyComplete: todo.isComplete,
-                          // }
-                        )
-                      ); // dispatching action "completeTheTodo" to complete the TODO
-                    }}
-                    className={
-                      "todo-card-button " +
-                      "complete-button " +
-                      (todo.isComplete ? "complete-button--complete" : "")
-                    } // adding classname "complete-button--complete" based on the todo element's "isComplete" flag
-                    // className='todo-card-button complete-button'
-                  >
-                    Complete
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      dispatch(deleteTheTodo(todo.id)); // dispatching action "deleteTheTodo" to delete the TODO
-                    }}
-                    className='todo-card-button delete-button'
-                  >
-                    Delete
-                  </button>
-                </div>
+                {/* passing TodoCardButtons as children to TodoCard, because we're in TodoContainer (in '/todos' page) so we want to show these buttons  */}
+                <TodoCardButtons todo={todo} />
               </TodoCard>
             )
           )}

@@ -18,7 +18,7 @@ import { ViewTodo, Home } from "./components";
 import SharedLayout from "./pages/dashboard/SharedLayout";
 
 const TodoApp = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // used in "onSubmit" for navigating from 'todos/:todoId/edit' to '/todos'
   const { isTodoCardBeingEdited, idOfTodoBeingEdited } = useAppSelector(
     (state) => state.todoForm // "isTodoCardBeingEdited" needed here in onSubmitForm function to know whether to create a new TODO or edit one, "idOfTodoBeingEdited" needed in onSubmitForm function to know which TODO to edit
   );
@@ -91,6 +91,7 @@ const TodoApp = () => {
           element={
             <>
               <TodoForm ref={titleInputRef} onSubmit={submitForm}>
+                {/* passing go-back-link into TodoForm in the 'todos/:todoId/edit' page */}
                 <Link to='/todos' className='go-back-link'>
                   Go back
                 </Link>

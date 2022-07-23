@@ -1,7 +1,6 @@
 import { useAppSelector } from "../shared/utils/hooks";
 
 import { TodoCardProps } from "./TodoCardTypes";
-import { Link } from "react-router-dom";
 
 const TodoCard = ({ todo, children: childrenButtons }: TodoCardProps) => {
   const { idOfTodoBeingEdited, isTodoCardBeingEdited } = useAppSelector(
@@ -22,7 +21,8 @@ const TodoCard = ({ todo, children: childrenButtons }: TodoCardProps) => {
         <div className='todo-card-title'>{todo.title}</div>
         <div className='todo-card-body'>{todo.body}</div>
       </div>
-      {childrenButtons}
+      {/* displaying childrenButtons passed in the "/todos" page */}
+      {childrenButtons && childrenButtons}
     </div>
   );
 };

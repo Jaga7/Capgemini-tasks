@@ -37,44 +37,7 @@ const ViewTodo = () => {
   }, [todoId]);
 
   return (
-    <div className='todo-container'>
-      {todo && (
-        <TodoCard todo={todo}>
-          <div className='todo-card-buttons'>
-            {/* <button
-              onClick={(e) => {
-                dispatch(startEditingTodo(todo)); // dispatching action "startEditingTodo" to start editing the TODO
-              }}
-              className='todo-card-button edit-button'
-            >
-              Edit
-            </button> */}
-            {/* <button
-              onClick={(e) => {
-                dispatch(
-                  completeTheTodo(
-                    todo
-                    //   {
-
-                    //   // idOfTodoBeingCompleted: todo.id,
-                    //   // isTodoAlreadyComplete: todo.isComplete,
-                    // }
-                  )
-                ); // dispatching action "completeTheTodo" to complete the TODO
-              }}
-              className={
-                "todo-card-button " +
-                "complete-button " +
-                (todo.isComplete ? "complete-button--complete" : "")
-              } // adding classname "complete-button--complete" based on the todo element's "isComplete" flag
-              // className='todo-card-button complete-button'
-            >
-              Complete
-            </button> */}
-          </div>
-        </TodoCard>
-      )}
-    </div>
+    <div className='todo-container'>{todo && <TodoCard todo={todo} />}</div>
   );
 };
 export default ViewTodo;
