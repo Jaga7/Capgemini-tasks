@@ -1,17 +1,19 @@
-import React from "react";
+import React, { Children } from "react";
 import { useAppDispatch, useAppSelector } from "../shared/utils/hooks";
 import { config } from "./constants";
 import { FormInputProps } from "./TodoFormTypes";
 
 const TodoForm = React.forwardRef<HTMLInputElement, FormInputProps>(
-  ({ onSubmit }, ref) => {
+  ({ onSubmit, children }, ref) => {
     const dispatch = useAppDispatch();
     const { newTodoTitle, newTodoBody, isTodoCardBeingEdited } = useAppSelector(
       (state) => state.todoForm
     );
     const newTodoValues = { newTodoTitle, newTodoBody };
+
     return (
-      <header>
+      <header className='form-header'>
+        {children && children}
         <form action='' className='create-todo-form' onSubmit={onSubmit}>
           {config.map(
             (

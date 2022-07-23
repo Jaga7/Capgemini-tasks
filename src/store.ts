@@ -3,13 +3,11 @@ import type { PreloadedState } from "@reduxjs/toolkit";
 
 import todoFormReducer from "./features/todoForm/todoFormSlice";
 import todoContainerReducer from "./features/todoContainer/todoContainerSlice";
-import viewTodoReducer from "./features/viewTodo/viewTodoSlice";
 
 // Create the root reducer separately so we can extract the RootState type
 const rootReducer = combineReducers({
   todoForm: todoFormReducer,
   todoContainer: todoContainerReducer,
-  viewTodo: viewTodoReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

@@ -7,11 +7,18 @@ import {
   editTheTodo,
 } from "./features/todoContainer/todoContainerSlice";
 import { finishEdit, clearInputs } from "./features/todoForm/todoFormSlice";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { ViewTodo, Home } from "./components";
 import SharedLayout from "./pages/dashboard/SharedLayout";
 
 const TodoApp = () => {
+  const navigate = useNavigate();
   const { isTodoCardBeingEdited, idOfTodoBeingEdited } = useAppSelector(
     (state) => state.todoForm // "isTodoCardBeingEdited" needed here in onSubmitForm function to know whether to create a new TODO or edit one, "idOfTodoBeingEdited" needed in onSubmitForm function to know which TODO to edit
   );
@@ -53,6 +60,8 @@ const TodoApp = () => {
         })
       ); // dispatching "editTheTodo" action, passing todo's edited title, todo's edited body and its id
       dispatch(finishEdit());
+      // navigate to "/todos" after saving the edited todo in the /todos/:id/edit route
+      navigate("/todos");
     } else {
       // dispatch(createATodo())
       dispatch(createATodo({ title: newTodoTitle, body: newTodoBody })); // dispatching "createATodo" action, passing the new todo's title and body
@@ -65,27 +74,34 @@ const TodoApp = () => {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<SharedLayout />}>
-          <Route index element={<Home />}></Route>
-          <Route
-            path='todos'
-            element={
-              <>
-                <TodoForm ref={titleInputRef} onSubmit={submitForm}></TodoForm>
-                <TodoContainer />
-              </>
-            }
-          >
-            <Route path=':todoId' element={<ViewTodo />} />
-          </Route>
-        </Route>
+    <Routes>
+      <Route path='/' element={<SharedLayout />}>
+        <Route index element={<Home />}></Route>
+        <Route
+          path='todos'
+          element={
+            <>
+              <TodoForm ref={titleInputRef} onSubmit={submitForm} />
+              <TodoContainer />
+            </>
+          }
+        ></Route>
+        <Route
+          path='todos/:todoId/edit'
+          element={
+            <>
+              <TodoForm ref={titleInputRef} onSubmit={submitForm}>
+                <Link to='/todos' className='go-back-link'>
+                  Go back
+                </Link>
+              </TodoForm>
 
-        {/* <TodoForm ref={titleInputRef} onSubmit={submitForm}></TodoForm> */}
-        {/* <TodoContainer></TodoContainer> */}
-      </Routes>
-    </BrowserRouter>
+              <ViewTodo />
+            </>
+          }
+        />
+      </Route>
+    </Routes>
   );
 };
 export default TodoApp;

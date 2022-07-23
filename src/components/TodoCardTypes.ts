@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export type TodoObject = {
   title: string;
   body: string;
@@ -7,4 +9,5 @@ export type TodoObject = {
 
 export type TodoCardProps = {
   todo: TodoObject;
+  children?: ReactElement<any, any>;
 };
