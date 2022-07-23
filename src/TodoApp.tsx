@@ -1,21 +1,15 @@
 import { useRef, useEffect } from "react";
-import TodoContainer from "./components/TodoContainer/TodoContainer";
-import TodoForm from "./components/TodoForm";
+
 import { useAppDispatch, useAppSelector } from "./shared/utils/hooks";
 import {
   createATodo,
   editTheTodo,
 } from "./features/todoContainer/todoContainerSlice";
 import { finishEdit, clearInputs } from "./features/todoForm/todoFormSlice";
-import {
-  BrowserRouter,
-  Link,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
-import { ViewTodo, Home } from "./components";
-import SharedLayout from "./pages/dashboard/SharedLayout";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { SharedLayout, Home } from "./pages/dashboard";
+import TodosPage from "./pages/dashboard/TodosPage";
+import EditTodo from "./pages/dashboard/EditTodo";
 
 const TodoApp = () => {
   const navigate = useNavigate(); // used in "onSubmit" for navigating from 'todos/:todoId/edit' to '/todos'
@@ -79,27 +73,11 @@ const TodoApp = () => {
         <Route index element={<Home />}></Route>
         <Route
           path='todos'
-          element={
-            <>
-              <TodoForm ref={titleInputRef} onSubmit={submitForm} />
-              <TodoContainer />
-            </>
-          }
+          element={<TodosPage ref={titleInputRef} onSubmit={submitForm} />}
         ></Route>
         <Route
           path='todos/:todoId/edit'
-          element={
-            <>
-              <TodoForm ref={titleInputRef} onSubmit={submitForm}>
-                {/* passing go-back-link into TodoForm in the 'todos/:todoId/edit' page */}
-                <Link to='/todos' className='go-back-link'>
-                  Go back
-                </Link>
-              </TodoForm>
-
-              <ViewTodo />
-            </>
-          }
+          element={<EditTodo ref={titleInputRef} onSubmit={submitForm} />}
         />
       </Route>
     </Routes>
