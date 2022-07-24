@@ -1,20 +1,22 @@
 import { Link } from "react-router-dom";
-import {
-  completeTheTodo,
-  deleteTheTodo,
-} from "../../features/todoContainer/todoContainerSlice";
-import { startEditingTodo } from "../../features/todoForm/todoFormSlice";
+// import {
+//   completeTheTodo,
+//   deleteTheTodo,
+// } from "../../features/todoContainer/todoContainerSlice";
+// import { startEditingTodo } from "../../features/todoForm/todoFormSlice";
 import { TodoCardProps } from "../TodoCardTypes";
-import { useAppDispatch } from "../../shared/utils/hooks";
+// import { useAppDispatch } from "../../shared/utils/hooks";
+import { useAppContext } from "../../context/appContext";
 
 const TodoCardButtons = ({ todo }: TodoCardProps) => {
-  const dispatch = useAppDispatch();
+  const { startEditingTodo, completeTheTodo, deleteTheTodo } = useAppContext();
+  // const dispatch = useAppDispatch();
   return (
     <div className='todo-card-buttons'>
       <Link to={`/todos/${todo.id}/edit`}>
         <button
           onClick={(e) => {
-            dispatch(startEditingTodo(todo)); // dispatching action "startEditingTodo" to start editing the TODO
+            startEditingTodo(todo); // dispatching action "startEditingTodo" to start editing the TODO
           }}
           className='todo-card-button edit-button'
         >
@@ -24,16 +26,15 @@ const TodoCardButtons = ({ todo }: TodoCardProps) => {
 
       <button
         onClick={(e) => {
-          dispatch(
-            completeTheTodo(
-              todo
-              //   {
+          completeTheTodo(
+            todo
+            //   {
 
-              //   // idOfTodoBeingCompleted: todo.id,
-              //   // isTodoAlreadyComplete: todo.isComplete,
-              // }
-            )
-          ); // dispatching action "completeTheTodo" to complete the TODO
+            //   // idOfTodoBeingCompleted: todo.id,
+            //   // isTodoAlreadyComplete: todo.isComplete,
+            // }
+          );
+          // dispatching action "completeTheTodo" to complete the TODO
         }}
         className={
           "todo-card-button " +
@@ -46,7 +47,7 @@ const TodoCardButtons = ({ todo }: TodoCardProps) => {
       </button>
       <button
         onClick={(e) => {
-          dispatch(deleteTheTodo(todo.id)); // dispatching action "deleteTheTodo" to delete the TODO
+          deleteTheTodo(todo.id); // dispatching action "deleteTheTodo" to delete the TODO
         }}
         className='todo-card-button delete-button'
       >

@@ -1,7 +1,7 @@
-import {
-  changeFormTitleInputValue,
-  changeFormBodyInputValue,
-} from "../features/todoForm/todoFormSlice";
+// import {
+//   changeFormTitleInputValue,
+//   changeFormBodyInputValue,
+// } from "../features/todoForm/todoFormSlice";
 import { Config } from "./TodoFormTypes";
 
 export const config: Config[] = [
@@ -10,13 +10,15 @@ export const config: Config[] = [
     propName: "newTodoTitle",
     label: "Todo Title",
     classNameSuffix: "title",
-    reduxAction: changeFormTitleInputValue,
+    // reduxAction: changeFormTitleInputValue,
+    actionName: "changeFormTitleInputValue",
   },
   {
     placeholderName: "Body",
     propName: "newTodoBody",
     label: "Todo Body",
     classNameSuffix: "body",
-    reduxAction: changeFormBodyInputValue,
+    // reduxAction: changeFormBodyInputValue,
+    actionName: "changeFormBodyInputValue",
   },
 ];

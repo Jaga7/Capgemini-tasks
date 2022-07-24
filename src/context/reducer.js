@@ -123,7 +123,7 @@ const reducer = (state, action) => {
         todo.id === idOfTodoBeingCompleted
           ? {
               ...todo,
-              isComplete: !isTodoAlreadyComplete, // setting the completed todo's "isComplete" flag's value to the one of the document returned by the patch request
+              isComplete: isTodoAlreadyComplete, // setting the completed todo's "isComplete" flag's value to the one of the document returned by the patch request
             }
           : todo
       ),
@@ -145,7 +145,7 @@ const reducer = (state, action) => {
   }
 
   if (action.type === DELETE_THE_TODO_SUCCESS) {
-    const idOfTodoBeingDeleted = action.payload;
+    const { idOfTodoBeingDeleted } = action.payload;
     return {
       ...state,
       isLoading: false,
@@ -181,7 +181,7 @@ const reducer = (state, action) => {
     }
     return {
       ...state,
-      isTodoCarBeingEdited: newIsTodoBeingEdited,
+      isTodoCardBeingEdited: newIsTodoBeingEdited,
       newTodoTitle: newTodoTitle, // setting form title input's value to the todo's title
       newTodoBody: newTodoBody, // setting form body input's value to the todo's body
       idOfTodoBeingEdited: action.payload.id, // we set "idOfTodoBeingEdited" to the todo's id
@@ -205,7 +205,7 @@ const reducer = (state, action) => {
   if (action.type === FINISH_EDIT) {
     return {
       ...state,
-      isTodoCarBeingEdited: false,
+      isTodoCardBeingEdited: false,
       idOfTodoBeingEdited: null,
     };
   }

@@ -24,7 +24,7 @@ import {
 
 import reducer from "./reducer";
 import axios from "axios";
-import api from "../../shared/utils/api";
+import api from "../shared/utils/api";
 
 const endpoint = "/todos";
 
@@ -130,7 +130,13 @@ const AppProvider = ({ children }) => {
     dispatch({ type: DELETE_THE_TODO_BEGIN });
     try {
       const resp = await api.delete(`${endpoint}/${idOfTodoBeingDeleted}`);
-      dispatch({ type: DELETE_THE_TODO_SUCCESS, payload: resp.data });
+      dispatch({
+        type: DELETE_THE_TODO_SUCCESS,
+        payload: {
+          idOfTodoBeingDeleted: idOfTodoBeingDeleted,
+          response: resp.data,
+        },
+      });
       // return resp.data;
     } catch (error) {
       dispatch({ type: DELETE_THE_TODO_ERROR });
@@ -138,14 +144,14 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const startEditingTodo = () => {
-    dispatch({ type: START_EDITING_TODO });
+  const startEditingTodo = (todo) => {
+    dispatch({ type: START_EDITING_TODO, payload: todo });
   };
-  const changeFormTitleInputValue = () => {
-    dispatch({ type: CHANGE_FORM_TITLE_INPUT_VALUE });
+  const changeFormTitleInputValue = (newInputValue) => {
+    dispatch({ type: CHANGE_FORM_TITLE_INPUT_VALUE, payload: newInputValue });
   };
-  const changeFormBodyInputValue = () => {
-    dispatch({ type: CHANGE_FORM_BODY_INPUT_VALUE });
+  const changeFormBodyInputValue = (newInputValue) => {
+    dispatch({ type: CHANGE_FORM_BODY_INPUT_VALUE, payload: newInputValue });
   };
   const finishEdit = () => {
     dispatch({ type: FINISH_EDIT });

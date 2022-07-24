@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "./shared/utils/hooks";
+import { useAppContext } from "./context/appContext";
 import {
   createATodo,
   editTheTodo,
@@ -12,12 +13,21 @@ import TodosPage from "./pages/dashboard/TodosPage";
 import EditTodo from "./pages/dashboard/EditTodo";
 
 const TodoApp = () => {
+  const {
+    finishEdit,
+    clearInputs,
+    createATodo,
+    editTheTodo,
+    todos,
+    isTodoCardBeingEdited,
+    idOfTodoBeingEdited,
+  } = useAppContext();
   const navigate = useNavigate(); // used in "onSubmit" for navigating from 'todos/:todoId/edit' to '/todos'
-  const { isTodoCardBeingEdited, idOfTodoBeingEdited } = useAppSelector(
-    (state) => state.todoForm // "isTodoCardBeingEdited" needed here in onSubmitForm function to know whether to create a new TODO or edit one, "idOfTodoBeingEdited" needed in onSubmitForm function to know which TODO to edit
-  );
-  const { todos } = useAppSelector((state) => state.todoContainer);
-  const dispatch = useAppDispatch();
+  // const { isTodoCardBeingEdited, idOfTodoBeingEdited } = useAppSelector(
+  //   (state) => state.todoForm // "isTodoCardBeingEdited" needed here in onSubmitForm function to know whether to create a new TODO or edit one, "idOfTodoBeingEdited" needed in onSubmitForm function to know which TODO to edit
+  // );
+  // const { todos } = useAppSelector((state) => state.todoContainer);
+  // const dispatch = useAppDispatch();
 
   // focusing on the todo title input
   useEffect(() => {
@@ -44,23 +54,21 @@ const TodoApp = () => {
     const newTodoBody = newTodoBodyInput.value; // split into two lines this way for Typescript, extracting value of the input
 
     if (isTodoCardBeingEdited) {
-      dispatch(
-        editTheTodo({
-          title: newTodoTitle,
-          body: newTodoBody,
-          id: idOfTodoBeingEdited as number,
-          isComplete: todos.find((todo) => todo.id === idOfTodoBeingEdited)!
-            .isComplete,
-        })
-      ); // dispatching "editTheTodo" action, passing todo's edited title, todo's edited body and its id
-      dispatch(finishEdit());
+      editTheTodo({
+        title: newTodoTitle,
+        body: newTodoBody,
+        id: idOfTodoBeingEdited as number,
+        isComplete: todos.find(
+          (todo: { id: any }) => todo.id === idOfTodoBeingEdited
+        )!.isComplete,
+      }); // dispatching "editTheTodo" action, passing todo's edited title, todo's edited body and its id
+      finishEdit();
       // navigate to "/todos" after saving the edited todo in the /todos/:id/edit route
       navigate("/todos");
     } else {
-      // dispatch(createATodo())
-      dispatch(createATodo({ title: newTodoTitle, body: newTodoBody })); // dispatching "createATodo" action, passing the new todo's title and body
+      createATodo({ title: newTodoTitle, body: newTodoBody }); // dispatching "createATodo" action, passing the new todo's title and body
     }
-    dispatch(clearInputs()); // clear inputs both after saving edited todo as well as after creating a new todo
+    clearInputs(); // clear inputs both after saving edited todo as well as after creating a new todo
   };
 
   const focusTitleInput = () => {

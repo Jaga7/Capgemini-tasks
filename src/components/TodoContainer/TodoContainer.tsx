@@ -1,29 +1,32 @@
 import TodoCard from "../TodoCard";
-import { useAppDispatch, useAppSelector } from "../../shared/utils/hooks";
+// import { useAppDispatch, useAppSelector } from "../../shared/utils/hooks";
 import { Key, useEffect } from "react";
 
-import {
-  // completeTheTodo,
-  // deleteTheTodo,
-  loadTodosFromBackend,
-} from "../../features/todoContainer/todoContainerSlice";
+// import {
+//   // completeTheTodo,
+//   // deleteTheTodo,
+//   loadTodosFromBackend,
+// } from "../../features/todoContainer/todoContainerSlice";
 import { Outlet } from "react-router-dom";
-import {
-  clearInputs,
-  finishEdit,
-  // startEditingTodo,
-} from "../../features/todoForm/todoFormSlice";
+// import {
+//   clearInputs,
+//   finishEdit,
+//   // startEditingTodo,
+// } from "../../features/todoForm/todoFormSlice";
 import TodoCardButtons from "./TodoCardButtons";
+import { useAppContext } from "../../context/appContext";
 
 const TodoContainer = () => {
-  const dispatch = useAppDispatch();
+  const { finishEdit, clearInputs, loadTodosFromBackend, todos, isLoading } =
+    useAppContext();
+  // const dispatch = useAppDispatch();
   const LoadTodos = () => {
-    dispatch(loadTodosFromBackend());
+    loadTodosFromBackend();
   };
-  const { todos, isLoading } = useAppSelector((state) => state.todoContainer);
+  // const { todos, isLoading } = useAppSelector((state) => state.todoContainer);
   const makeSureATodoIsNotBeingEdited = () => {
-    dispatch(finishEdit());
-    dispatch(clearInputs());
+    finishEdit();
+    clearInputs();
   };
   useEffect(() => {
     makeSureATodoIsNotBeingEdited(); // for when returning from "/todos/:id/edit"

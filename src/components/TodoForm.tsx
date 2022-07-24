@@ -1,14 +1,26 @@
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../shared/utils/hooks";
+import { useAppContext } from "../context/appContext";
+// import { useAppDispatch, useAppSelector } from "../shared/utils/hooks";
 import { config } from "./constants";
 import { FormInputProps } from "./TodoFormTypes";
 
 const TodoForm = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ onSubmit, children }, ref) => {
-    const dispatch = useAppDispatch();
-    const { newTodoTitle, newTodoBody, isTodoCardBeingEdited } = useAppSelector(
-      (state) => state.todoForm
-    );
+    // const dispatch = useAppDispatch();
+    // const { newTodoTitle, newTodoBody, isTodoCardBeingEdited } = useAppSelector(
+    //   (state) => state.todoForm
+    // );
+    const {
+      newTodoTitle,
+      newTodoBody,
+      isTodoCardBeingEdited,
+      changeFormTitleInputValue,
+      changeFormBodyInputValue,
+    } = useAppContext();
+    const configActions = {
+      changeFormTitleInputValue: changeFormTitleInputValue,
+      changeFormBodyInputValue: changeFormBodyInputValue,
+    };
     const newTodoValues = { newTodoTitle, newTodoBody };
 
     return (
@@ -33,7 +45,11 @@ const TodoForm = React.forwardRef<HTMLInputElement, FormInputProps>(
                   }
                   onChange={(e) => {
                     const newInputValue = e.target.value;
-                    dispatch(input.reduxAction({ newInputValue }));
+                    // dispatch(input.reduxAction({ newInputValue }));
+
+                    configActions[
+                      input.actionName as keyof typeof configActions
+                    ]({ newInputValue });
                   }}
                   placeholder={input.placeholderName}
                   {...(input.propName === "newTodoTitle" && {

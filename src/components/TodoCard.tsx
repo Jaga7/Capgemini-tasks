@@ -1,11 +1,13 @@
-import { useAppSelector } from "../shared/utils/hooks";
+// import { useAppSelector } from "../shared/utils/hooks";
 
+import { useAppContext } from "../context/appContext";
 import { TodoCardProps } from "./TodoCardTypes";
 
 const TodoCard = ({ todo, children: childrenButtons }: TodoCardProps) => {
-  const { idOfTodoBeingEdited, isTodoCardBeingEdited } = useAppSelector(
-    (state) => state.todoForm
-  );
+  const { idOfTodoBeingEdited, isTodoCardBeingEdited } = useAppContext();
+  // const { idOfTodoBeingEdited, isTodoCardBeingEdited } = useAppSelector(
+  //   (state) => state.todoForm
+  // );
   return (
     <div
       className={

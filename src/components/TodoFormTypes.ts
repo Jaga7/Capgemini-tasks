@@ -11,5 +11,6 @@ export interface Config {
   propName: string;
   label: string;
   classNameSuffix: string;
-  reduxAction: ActionCreatorWithPayload<any, string>;
+  // reduxAction: ActionCreatorWithPayload<any, string>;
+  actionName: string;
 }
