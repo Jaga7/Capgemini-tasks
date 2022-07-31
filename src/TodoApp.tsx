@@ -6,10 +6,14 @@ import {
   editTheTodo,
 } from "./features/todoContainer/todoContainerSlice";
 import { finishEdit, clearInputs } from "./features/todoForm/todoFormSlice";
+import { loginUser } from "./features/auth/authSlice";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { SharedLayout, Home } from "./pages/dashboard";
 import TodosPage from "./pages/dashboard/TodosPage";
 import EditTodo from "./pages/dashboard/EditTodo";
+import severJsonApi from "./shared/utils/api-server-json";
+import { Auth } from "./pages";
+import { User } from "./features/auth/authTypes";
 
 const TodoApp = () => {
   const navigate = useNavigate(); // used in "onSubmit" for navigating from 'todos/:todoId/edit' to '/todos'
@@ -18,7 +22,18 @@ const TodoApp = () => {
   );
   const { todos } = useAppSelector((state) => state.todoContainer);
   const dispatch = useAppDispatch();
-
+  // localStorage.setItem("token", "1");
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token")!);
+    if (token) {
+      severJsonApi.get("auth/" + token).then((r) => {
+        const retrievedUser: User = r.data;
+        dispatch(loginUser(retrievedUser.name));
+      });
+    } else {
+      navigate("/login");
+    }
+  }, []);
   // focusing on the todo title input
   useEffect(() => {
     focusTitleInput();
@@ -80,6 +95,7 @@ const TodoApp = () => {
           element={<EditTodo ref={titleInputRef} onSubmit={submitForm} />}
         />
       </Route>
+      <Route path='/login' element={<Auth />}></Route>
     </Routes>
   );
 };

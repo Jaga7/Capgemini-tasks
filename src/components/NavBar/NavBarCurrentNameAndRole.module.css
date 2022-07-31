@@ -1,0 +1,4 @@
+.current-user-name-and-role {
+  display: flex;
+  gap: 1.6rem;
+}

@@ -1,4 +1,4 @@
-import NavBar from "./NavBar";
+import NavBar from "./NavBar/NavBar";
 import TodoCard from "./TodoCard";
 import TodoContainer from "./TodoContainer/TodoContainer";
 import TodoForm from "./TodoForm";

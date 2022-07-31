@@ -5,10 +5,12 @@ import {
 } from "../../features/todoContainer/todoContainerSlice";
 import { startEditingTodo } from "../../features/todoForm/todoFormSlice";
 import { TodoCardProps } from "../TodoCardTypes";
-import { useAppDispatch } from "../../shared/utils/hooks";
+import { useAppDispatch, useAppSelector } from "../../shared/utils/hooks";
 
 const TodoCardButtons = ({ todo }: TodoCardProps) => {
   const dispatch = useAppDispatch();
+  const { currentUser } = useAppSelector((state) => state.auth);
+
   return (
     <div className='todo-card-buttons'>
       <Link to={`/todos/${todo.id}/edit`}>
@@ -44,14 +46,16 @@ const TodoCardButtons = ({ todo }: TodoCardProps) => {
       >
         Complete
       </button>
-      <button
-        onClick={(e) => {
-          dispatch(deleteTheTodo(todo.id)); // dispatching action "deleteTheTodo" to delete the TODO
-        }}
-        className='todo-card-button delete-button'
-      >
-        Delete
-      </button>
+      {currentUser && currentUser.role === "admin" && (
+        <button
+          onClick={(e) => {
+            dispatch(deleteTheTodo(todo.id)); // dispatching action "deleteTheTodo" to delete the TODO
+          }}
+          className='todo-card-button delete-button'
+        >
+          Delete
+        </button>
+      )}
     </div>
   );
 };

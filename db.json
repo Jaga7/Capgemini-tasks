@@ -1,4 +1,26 @@
 {
+  "auth": [
+    {
+      "id": 1,
+      "name": "admin",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "user",
+      "role": "user"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Bob2"
+    },
+    {
+      "id": 2,
+      "name": "qwe"
+    }
+  ],
   "todos": [
     {
       "title": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet explicabo expedita, suscipit cum tempore molestias porro facilis dolorum rem, nulla quod enim qui inventore reprehenderit et aspernatur ratione eaque nam?",

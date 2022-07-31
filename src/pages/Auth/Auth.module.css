@@ -1,0 +1,8 @@
+.login-component {
+  padding-top: 1.6rem;
+}
+
+.invalid-login {
+  padding-top: 1rem;
+  color: #ff0000;
+}

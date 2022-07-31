@@ -14,6 +14,7 @@ import {
   // startEditingTodo,
 } from "../../features/todoForm/todoFormSlice";
 import TodoCardButtons from "./TodoCardButtons";
+import { Skeleton } from "@mui/material";
 
 const TodoContainer = () => {
   const dispatch = useAppDispatch();
@@ -28,14 +29,16 @@ const TodoContainer = () => {
   useEffect(() => {
     makeSureATodoIsNotBeingEdited(); // for when returning from "/todos/:id/edit"
     LoadTodos();
-  }, []);
+  }, []); //<Skeleton variant="rectangular" width={210} height={118} />
   return (
     <>
       <Outlet></Outlet>
       <div className='todo-container'>
         <h2>Todos:</h2>
-        {/* <h2 className="loading">Loading...</h2> */}
-        {isLoading && <h2 className='loading'>Loading...</h2>}
+        {isLoading && (
+          <Skeleton variant='rectangular' width={780} height={84} />
+        )}
+        {/* {isLoading && <h2 className='loading'>Loading...</h2>} */}
         {!isLoading &&
           todos.length > 1 &&
           todos.map(

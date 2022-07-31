@@ -1,7 +1,7 @@
-import links from "../shared/utils/links";
+import links from "../../shared/utils/links";
 import { NavLink } from "react-router-dom";
 
-const NavBar = () => {
+const NavLinks = () => {
   return (
     <div className='nav-links'>
       {links.map((link) => {
@@ -21,4 +21,4 @@ const NavBar = () => {
     </div>
   );
 };
-export default NavBar;
+export default NavLinks;

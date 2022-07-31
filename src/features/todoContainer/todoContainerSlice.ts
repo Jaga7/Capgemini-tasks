@@ -20,9 +20,6 @@ const initialState = {
 export const loadTodosFromBackend = createAsyncThunk(
   "todoContainer/loadTodos",
   async (name, thunkAPI) => {
-    // if (thunkAPI.getState().contactForm.questionAnsweredCorrectly) {
-    //   return thunkAPI.rejectWithValue("answer is right")
-    // }
     try {
       const resp = await api.get(`${endpoint}`);
       return resp.data;
