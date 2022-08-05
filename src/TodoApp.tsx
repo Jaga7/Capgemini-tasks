@@ -104,6 +104,7 @@ const TodoApp = () => {
           element={<EditTodo ref={titleInputRef} onSubmit={submitForm} />}
         />
       </Route>
+
       <Route path='/login' element={<Auth />}></Route>
     </Routes>
   );

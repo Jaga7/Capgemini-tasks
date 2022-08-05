@@ -4,8 +4,19 @@ import TodoCardButtons from "./TodoCardButtons";
 import { Skeleton } from "@mui/material";
 import { todosAPI } from "../../services/todos-service";
 import { TodoT } from "../../types/TodoT";
+import { clearInputs, finishEdit } from "../../features/todoForm/todoFormSlice";
+import { useAppDispatch } from "../../shared/utils/hooks";
+import { useEffect } from "react";
 
 const TodoContainer = () => {
+  const dispatch = useAppDispatch();
+  const makeSureATodoIsNotBeingEdited = () => {
+    dispatch(finishEdit());
+    dispatch(clearInputs());
+  };
+  useEffect(() => {
+    makeSureATodoIsNotBeingEdited(); // for when returning from "/todos/:id/edit"
+  }, []);
   const {
     data: todos,
     error,
