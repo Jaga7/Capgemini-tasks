@@ -1,16 +1,20 @@
 import { Link } from "react-router-dom";
-import {
-  completeTheTodo,
-  deleteTheTodo,
-} from "../../features/todoContainer/todoContainerSlice";
 import { startEditingTodo } from "../../features/todoForm/todoFormSlice";
 import { TodoCardProps } from "../TodoCardTypes";
 import { useAppDispatch, useAppSelector } from "../../shared/utils/hooks";
+import { todosAPI } from "../../services/todos-service";
 
 const TodoCardButtons = ({ todo }: TodoCardProps) => {
   const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector((state) => state.auth);
-
+  const [
+    completeTheTodo, // This is the mutation trigger
+    { isLoading: isCompleteUpdating }, // This is the destructured mutation result
+  ] = todosAPI.useCompleteTheTodoMutation();
+  const [
+    deleteTheTodo, // This is the mutation trigger
+    { isLoading: isDeleteUpdating }, // This is the destructured mutation result
+  ] = todosAPI.useDeleteTheTodoMutation();
   return (
     <div className='todo-card-buttons'>
       <Link to={`/todos/${todo.id}/edit`}>
@@ -26,16 +30,7 @@ const TodoCardButtons = ({ todo }: TodoCardProps) => {
 
       <button
         onClick={(e) => {
-          dispatch(
-            completeTheTodo(
-              todo
-              //   {
-
-              //   // idOfTodoBeingCompleted: todo.id,
-              //   // isTodoAlreadyComplete: todo.isComplete,
-              // }
-            )
-          ); // dispatching action "completeTheTodo" to complete the TODO
+          completeTheTodo({ ...todo, isComplete: !todo.isComplete });
         }}
         className={
           "todo-card-button " +
@@ -49,7 +44,7 @@ const TodoCardButtons = ({ todo }: TodoCardProps) => {
       {currentUser && currentUser.role === "admin" && (
         <button
           onClick={(e) => {
-            dispatch(deleteTheTodo(todo.id)); // dispatching action "deleteTheTodo" to delete the TODO
+            deleteTheTodo({ ...todo });
           }}
           className='todo-card-button delete-button'
         >

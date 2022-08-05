@@ -14,6 +14,8 @@ const todoFormSlice = createSlice({
   initialState,
   reducers: {
     startEditingTodo: (state, action) => {
+      console.log("a", action);
+      console.log("b", action.payload);
       state.newTodoTitle = action.payload.title; // setting form title input's value to the todo's title
       state.newTodoBody = action.payload.body; // setting form body input's value to the todo's body
       if (state.idOfTodoBeingEdited === action.payload.id) {

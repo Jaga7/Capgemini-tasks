@@ -1,10 +1,5 @@
 import { useRef, useEffect } from "react";
-
 import { useAppDispatch, useAppSelector } from "./shared/utils/hooks";
-import {
-  createATodo,
-  editTheTodo,
-} from "./features/todoContainer/todoContainerSlice";
 import { finishEdit, clearInputs } from "./features/todoForm/todoFormSlice";
 import { loginUser } from "./features/auth/authSlice";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -14,15 +9,30 @@ import EditTodo from "./pages/dashboard/EditTodo";
 import severJsonApi from "./shared/utils/api-server-json";
 import { Auth } from "./pages";
 import { User } from "./features/auth/authTypes";
+import { todosAPI } from "./services/todos-service";
 
 const TodoApp = () => {
   const navigate = useNavigate(); // used in "onSubmit" for navigating from 'todos/:todoId/edit' to '/todos'
   const { isTodoCardBeingEdited, idOfTodoBeingEdited } = useAppSelector(
     (state) => state.todoForm // "isTodoCardBeingEdited" needed here in onSubmitForm function to know whether to create a new TODO or edit one, "idOfTodoBeingEdited" needed in onSubmitForm function to know which TODO to edit
   );
-  const { todos } = useAppSelector((state) => state.todoContainer);
+  const {
+    data: todos,
+    error,
+    isLoading,
+    isSuccess,
+    isError,
+    refetch,
+  } = todosAPI.useFetchAllTodosQuery(null, {});
   const dispatch = useAppDispatch();
-  // localStorage.setItem("token", "1");
+  const [
+    createATodo, // This is the mutation trigger
+    { isLoading: isCreateUpdating }, // This is the destructured mutation result
+  ] = todosAPI.useCreateATodoMutation();
+  const [
+    editTheTodo, // This is the mutation trigger
+    { isLoading: isEditUpdating }, // This is the destructured mutation result
+  ] = todosAPI.useEditTheTodoMutation();
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token")!);
     if (token) {
@@ -37,7 +47,7 @@ const TodoApp = () => {
   // focusing on the todo title input
   useEffect(() => {
     focusTitleInput();
-  }, [isTodoCardBeingEdited, idOfTodoBeingEdited, todos.length]); // "idOfTodoBeingEdited" is needed aside from "isTodoCardBeingEdited" for when user clicks "edit" on one todo and right after clicks "edit" on a different todo , "todos.length" is for when a new todo is created
+  }, [isTodoCardBeingEdited, idOfTodoBeingEdited, todos?.length]); // "idOfTodoBeingEdited" is needed aside from "isTodoCardBeingEdited" for when user clicks "edit" on one todo and right after clicks "edit" on a different todo , "todos.length" is for when a new todo is created
 
   const titleInputRef = useRef<HTMLInputElement>(null); // needed for focusing on the todo title input, when clicked "edit"
 
@@ -59,21 +69,20 @@ const TodoApp = () => {
     const newTodoBody = newTodoBodyInput.value; // split into two lines this way for Typescript, extracting value of the input
 
     if (isTodoCardBeingEdited) {
-      dispatch(
-        editTheTodo({
-          title: newTodoTitle,
-          body: newTodoBody,
-          id: idOfTodoBeingEdited as number,
-          isComplete: todos.find((todo) => todo.id === idOfTodoBeingEdited)!
-            .isComplete,
-        })
-      ); // dispatching "editTheTodo" action, passing todo's edited title, todo's edited body and its id
+      editTheTodo({
+        title: newTodoTitle,
+        body: newTodoBody,
+        id: idOfTodoBeingEdited as number,
+        isComplete: todos?.find((todo) => todo.id === idOfTodoBeingEdited)!
+          .isComplete,
+      });
+
       dispatch(finishEdit());
       // navigate to "/todos" after saving the edited todo in the /todos/:id/edit route
       navigate("/todos");
     } else {
-      // dispatch(createATodo())
-      dispatch(createATodo({ title: newTodoTitle, body: newTodoBody })); // dispatching "createATodo" action, passing the new todo's title and body
+      createATodo({ title: newTodoTitle, body: newTodoBody });
+      // createATodo action, passing the new todo's title and body
     }
     dispatch(clearInputs()); // clear inputs both after saving edited todo as well as after creating a new todo
   };

@@ -8,20 +8,27 @@ import {
   clearInputs,
   startEditingTodo,
 } from "../features/todoForm/todoFormSlice";
-import {
-  completeTheTodo,
-  deleteTheTodo,
-} from "../features/todoContainer/todoContainerSlice";
 import React from "react";
+import { todosAPI } from "../services/todos-service";
+import { TodoT } from "../types/TodoT";
 
 const ViewTodo = () => {
   const { todoId } = useParams();
-  const { todos } = useAppSelector((state) => state.todoContainer);
+  // const { todos } = useAppSelector((state) => state.todoContainer);
   const dispatch = useAppDispatch();
   const [todo, setTodo] = useState<TodoObject | null>(null);
+  const {
+    data: todos,
+    error,
+    isLoading,
+    isSuccess,
+    isError,
+    refetch,
+  } = todosAPI.useFetchAllTodosQuery(null, {});
 
   useEffect(() => {
-    const newTodo = todos.find((todo) => todo.id.toString() === todoId);
+    const newTodo =
+      todos && todos.find((todo) => todo.id.toString() === todoId);
     setTodo(newTodo as TodoObject);
   }, [todos, todoId]);
 
@@ -32,7 +39,9 @@ const ViewTodo = () => {
     todo
       ? dispatch(startEditingTodo(todo))
       : dispatch(
-          startEditingTodo(todos.find((todo) => todo.id.toString() === todoId))
+          startEditingTodo(
+            todos && todos.find((todo) => todo.id.toString() === todoId)
+          )
         );
   }, [todoId]);
 
