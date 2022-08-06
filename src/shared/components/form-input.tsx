@@ -1,5 +1,7 @@
 import React from "react";
 import { FormInputProps } from "../../types/FormInputProps";
+
+import styles from "./form-input.module.css";
 export const FormInput: React.FC<FormInputProps> = ({
   label,
   value,
@@ -11,7 +13,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   onBlur,
 }) => {
   return (
-    <div>
+    <div className={styles["form-input"]}>
       <input
         type={type}
         name={name}

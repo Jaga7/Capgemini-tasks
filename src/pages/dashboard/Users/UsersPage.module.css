@@ -1,0 +1,15 @@
+.create-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2.5rem;
+  justify-content: start;
+  gap: 2rem;
+  align-items: flex-start;
+  width: 20%;
+}
+
+label {
+  margin-left: 1rem;
+  align-self: center;
+  inline-size: max-content;
+}
