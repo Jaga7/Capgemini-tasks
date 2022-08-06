@@ -1,4 +1,5 @@
 import { RiHomeFill, RiTodoFill } from "react-icons/ri";
+import { ImUsers } from "react-icons/im";
 
 const links = [
   {
@@ -12,6 +13,12 @@ const links = [
     text: "todos",
     path: "todos",
     icon: <RiTodoFill />,
+  },
+  {
+    id: 3,
+    text: "users",
+    path: "users",
+    icon: <ImUsers />,
   },
 ];
 

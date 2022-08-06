@@ -10,6 +10,7 @@ import severJsonApi from "./shared/utils/api-server-json";
 import { Auth } from "./pages";
 import { User } from "./features/auth/authTypes";
 import { todosAPI } from "./services/todos-service";
+import UsersPage from "./pages/dashboard/Users/UsersPage";
 
 const TodoApp = () => {
   const navigate = useNavigate(); // used in "onSubmit" for navigating from 'todos/:todoId/edit' to '/todos'
@@ -103,6 +104,7 @@ const TodoApp = () => {
           path='todos/:todoId/edit'
           element={<EditTodo ref={titleInputRef} onSubmit={submitForm} />}
         />
+        <Route path='users' element={<UsersPage />} />
       </Route>
       <Route path='/login' element={<Auth />}></Route>
     </Routes>
